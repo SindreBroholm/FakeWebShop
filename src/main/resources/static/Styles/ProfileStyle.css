@@ -1,0 +1,75 @@
+.profileH2{
+    font-size: 3em;
+    color: lightsalmon;
+    text-align: center;
+    margin: 0% auto 3% auto;
+}
+p{
+    color: black;
+    font-size: 2em;
+}
+.userDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+            ". name name1 ."
+            ". age age1 ."
+            ". mail mail1 ."
+            ". address address1 ."
+            ". zipCode zipCode1 ."
+            ". . editB .";
+    justify-content: center;
+    align-items: center;
+    margin: 7% auto 0 auto;
+    gap: 3% 0;
+}
+.name {
+    grid-area: name;
+}
+.name1{
+    grid-area: name1;
+}
+.age{
+    grid-area: age;
+}
+.age1{
+    grid-area: age1;
+}
+.mail {
+    grid-area: mail;
+}
+.mail1 {
+    grid-area: mail1;
+}
+.address{
+    grid-area: address;
+}
+.address1{
+    grid-area: address1;
+}
+.zipCode{
+    grid-area: zipCode;
+}
+.zipCode1{
+    grid-area: zipCode1;
+}
+.editbuttom {
+    grid-area: editB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editb {
+    width: 66%;
+    margin: 2.5%;
+    color: white;
+    text-decoration: none;
+    background-color: lightsalmon;
+    border: 1px solid;
+    border-radius: 30px;
+    padding: 10px 30px;
+    transition: all 1s;
+    text-align: center;
+}

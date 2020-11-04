@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/SignupStyle.css}">
+    <title>Home</title>
+</head>
+<body class="grid-container">
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+        </section>
+    </nav>
+</header>
+<main>
+    <h2 class="newAccounth2"> Create new account</h2>
+    <form th:action="'signup'" th:method="post" th:object="${user}">
+
+        <label class="name">Name* </label>
+        <input class="name1" th:errorclass="filderror" th:field="*{name}">
+
+        <label class="email">E-mail*</label>
+        <input class="email1" th:errorclass="filderror" th:field="*{mail}">
+
+        <label class="age">Age* </label>
+        <input class="age1" type="number" th:errorclass="filderror" th:field="*{age}">
+
+        <label class="password">Password* </label>
+        <input class="password1" th:errorclass="filderror" type="password" th:field="*{password}">
+
+        <label class="address">Address</label>
+        <input class="address1" th:field="*{address}">
+
+        <label class="zipCode">Zip Code</label>
+        <input class="zipCode1" th:field="*{zipCode}">
+
+
+        <div class="loginbuttom ">
+            <button type="submit" class="login btb hoverDiscover">Sign up</button>
+        </div>
+
+        <div class="backbuttom">
+            <a th:href="@{/}" class="login btb hoverDiscover" id="my-button">Back</a>
+        </div>
+    </form>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>

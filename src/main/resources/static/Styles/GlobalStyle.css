@@ -1,0 +1,115 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+body {
+    width: 100vw;
+    height: fit-content;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 0.7fr 1.2fr 1.2fr 1.2fr 0.7fr;
+    grid-template-rows: 0.8fr 1.2fr 1.2fr 1.2fr 0.6fr;
+    gap: 0px 0px;
+    grid-template-areas:
+    "Header Header Header Header Header"
+    ". Main Main Main ."
+    ". Main Main Main ."
+    ". Main Main Main ."
+    "Footer Footer Footer Footer Footer";
+}
+
+header {
+    background-image: url("../Assets/cover.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    grid-area: Header;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.navigation {
+    width: 80%;
+    height: 50px;
+    margin: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.allNavButtons {
+    margin: 0 0 0 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.navButton {
+    margin: 0 20px;
+    font-size: 2em;
+    color: white;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+.navButtonRight {
+    margin: 0 20px;
+    font-size: 2em;
+    color: lightsalmon;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+.hoverNavButton:hover {
+    transform: scale(1.2, 1.2);
+    color: lightsalmon;
+}
+input[type="submit" i] {
+    user-select: none;
+    white-space: pre;
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    color: lightsalmon;
+    background-color: transparent;
+    padding: 0;
+    border-width: 0;
+    border-style: none;
+    border-color: transparent;
+    border-image: none;
+}
+.loginButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: all 1s;
+}
+
+main {
+    grid-area: Main;
+    min-height: 100vh;
+}
+
+footer {
+    color: white;
+    grid-area: Footer;
+    background-color: black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.footerInfo{
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px;
+}
+.kontaktinfo {
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px;
+}

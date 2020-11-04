@@ -1,0 +1,57 @@
+
+.loginbox {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+            ". loginh2 ."
+            ". username ."
+            ". password ."
+            ". submit .";
+    justify-content: center;
+    align-items: center;
+    margin: 7% auto 0% auto;
+}
+.loginh2 {
+    grid-area: loginh2;
+    text-align: center;
+    color: lightsalmon;
+    font-size: 3em;
+    margin: 0% auto 3% auto;
+}
+
+.username {
+    grid-area: username;
+    text-align: center;
+
+}
+.password {
+    grid-area: password;
+    text-align: center;
+
+}
+.loginbuttom {
+    grid-area: submit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btb {
+    width: 66%;
+    margin: 2.5%;
+    color: white;
+    text-decoration: none;
+    background-color: lightsalmon;
+    border: 1px solid;
+    border-radius: 30px;
+    padding: 10px 30px;
+    transition: all 1s;
+    text-align: center;
+}
+.createAccount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

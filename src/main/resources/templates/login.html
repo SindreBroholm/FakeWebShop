@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/LoginStyle.css}">
+    <title>Home</title>
+</head>
+<body class="grid-container">
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+        </section>
+    </nav>
+</header>
+<main>
+    <form th:action="@{/login}" method="post" class="loginbox">
+        <h2 class="loginh2">Login</h2>
+
+        <div class="username">
+            <p for="username">E-mail</p>
+            <input type="text" id="username" name="username">
+        </div>
+
+        <div class="password">
+            <p for="password">Password</p>
+            <input type="password" id="password" name="password">
+        </div>
+        <div class="loginbuttom">
+            <button type="submit" class="btb hoverDiscover">LOGIN</button>
+        </div>
+    </form>
+    <div class="createAccount">
+        <p>Don’t Have An Account?<br> <a th:href="'signup'">Create One</a></p>
+    </div>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>

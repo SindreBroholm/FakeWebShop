@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/ProfileStyle.css}">
+    <title>Profile</title>
+</head>
+<body class="grid-container">
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+        </section>
+        <section class="loginButtons">
+            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+                <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
+            </form>
+        </section>
+    </nav>
+</header>
+<main>
+    <h2 class="profileH2">Profile</h2>
+    <section class="userDetails">
+
+        <p class="name">Name</p>
+        <p class="name1" th:text="${user.name}"></p>
+
+
+        <p class="age">Age</p>
+        <p class="age1" th:text="${user.age}"></p>
+
+
+        <p class="mail">E-mail</p>
+        <p class="mail1" th:text="${user.mail}"></p>
+
+
+        <p class="address">Address</p>
+        <p class="address1" th:text="${user.address}"></p>
+
+
+        <p class="zipCode">Zip-Code</p>
+        <p class="zipCode1" th:text="${user.zipCode}"></p>
+
+        <div class="editbuttom">
+            <a class="editb" th:href="@{/editprofile}">Edit profile</a>
+        </div>
+    </section>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>

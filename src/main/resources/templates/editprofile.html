@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/EditProfileStyle.css}">
+    <title>Edit Profile</title>
+</head>
+<body>
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+        </section>
+        <section class="loginButtons">
+            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+                <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
+            </form>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/signup}">Sign up</a>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/login}">Login</a>
+        </section>
+    </nav>
+</header>
+<main>
+    <h2 class="profileH2">Profile</h2>
+    <form class="userDetails" th:action="'editprofile'" th:method="post" th:object="${user}">
+        <input type="hidden" th:field="*{id}">
+
+        <p class="name">Name*</p>
+        <input class="name1" th:errorclass="filderror" th:field="*{name}">
+
+        <p class="age">Age*</p>
+        <input class="age1" type="number" th:errorclass="filderror" th:field="*{age}">
+
+        <p class="mail">E-mail*</p>
+        <input class="mail1" th:errorclass="filderror" th:field="*{mail}">
+
+        <p class="password" >Password* </p>
+        <input class="password1" th:errorclass="filderror" type="password" th:field="*{password}">
+
+        <p class="address">Address</p>
+        <input class="address1" th:field="*{address}">
+
+
+        <p class="zipCode">Zip-Code</p>
+        <input class="zipCode1" th:field="*{zipCode}">
+
+        <div class="submitButton ">
+            <button type="submit" class="btb hoverDiscover">Edit</button>
+        </div>
+
+        <div class="backbuttom">
+            <a class="btb hoverDiscover" th:href="@{/profile}">Back</a>
+        </div>
+    </form>
+</main>
+<footer>
+
+</footer>
+
+</body>
+</html>

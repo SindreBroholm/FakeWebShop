@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <title>Home</title>
+</head>
+<body class="grid-container">
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+        </section>
+        <section class="loginButtons">
+            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+                <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
+            </form>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/signup}">Sign up</a>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/login}">Login</a>
+        </section>
+    </nav>
+</header>
+<main>
+
+</main>
+<footer>
+    <div class="footerInfo">
+        <p>Dette er en falsk nettside</p>
+    </div>
+    <div class="kontaktinfo">
+        <p>Sindre Broholm Sæther</p>
+        <p>Tlf: 93071137</p>
+        <p>Junior It Konsulent</p>
+    </div>
+</footer>
+</body>
+</html>
