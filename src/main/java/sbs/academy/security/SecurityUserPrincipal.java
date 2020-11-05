@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SecurityUserPrincipal implements UserDetails {
 
-    private User user;
+    private final User user;
 
     public SecurityUserPrincipal(User user) {
         this.user = user;
@@ -19,8 +19,7 @@ public class SecurityUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> authorities = Collections.singletonList((new SimpleGrantedAuthority("USER")));
-        return authorities;
+        return Collections.<GrantedAuthority>singletonList((new SimpleGrantedAuthority("USER")));
     }
 
     @Override

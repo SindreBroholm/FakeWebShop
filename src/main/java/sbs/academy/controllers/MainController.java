@@ -9,10 +9,9 @@ import sbs.academy.data.DTO;
 import sbs.academy.data.Products;
 import sbs.academy.data.User;
 import sbs.academy.data.UserOrder;
-import sbs.academy.repositories.ProductRepositorie;
-import sbs.academy.repositories.UserOrderRepositorie;
-import sbs.academy.repositories.UserRepositorie;
-import sbs.academy.security.UserAccessService;
+import sbs.academy.repositories.ProductRepository;
+import sbs.academy.repositories.UserOrderRepository;
+import sbs.academy.repositories.UserRepository;
 import sbs.academy.validators.UserValidator;
 
 import java.security.Principal;
@@ -22,48 +21,35 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    private UserRepositorie userRepositorie;
-    private ProductRepositorie productRepositorie;
-    private UserOrderRepositorie userOrderRepositorie;
-    private PasswordEncoder passwordEncoder;
-    private UserAccessService userAccessService;
-    private DTO dto;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final UserOrderRepository userOrderRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public MainController(UserRepositorie userRepositorie, ProductRepositorie productRepositorie,
-                          UserOrderRepositorie userOrderRepositorie, PasswordEncoder passwordEncoder,
-                          UserAccessService userAccessService) {
-        this.userRepositorie = userRepositorie;
-        this.productRepositorie = productRepositorie;
-        this.userOrderRepositorie = userOrderRepositorie;
+    public MainController(UserRepository userRepository, ProductRepository productRepository,
+                          UserOrderRepository userOrderRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.userOrderRepository = userOrderRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userAccessService = userAccessService;;
     }
 
     @GetMapping("/")
     public String showHomePage(Principal principal, Model model) {
-        model.addAttribute("principal", principal);
-        if (principal != null) {
-            User user = userAccessService.getLogedInUser(principal);
+        if (isUserLogedIn(principal)) {
+            User user = getLoggedInUser(principal);
             model.addAttribute("user", user);
-            List<UserOrder> allUserOrders = userOrderRepositorie.findAllByUserId(user.getId());
-            model.addAttribute("userOrders", allUserOrders);
-            List<Products> listOfAllProductsToUser = userOrderRepositorie.getAllProductsToUser(user.getId());
-            int cartTotalSum = 0;
-            for (Products p : listOfAllProductsToUser) {
-                cartTotalSum += Integer.parseInt(p.getPrice());
-            }
-            model.addAttribute("cartTotalSum", cartTotalSum);
-            model.addAttribute("allUserProducts", listOfAllProductsToUser);
+            model.addAttribute("userOrders", userOrderRepository.findAllByUserId(user.getId()));
+            model.addAttribute("cartTotalSum", getSumTotalForUsersCart(user.getId()));
+            model.addAttribute("allUserProducts", userOrderRepository.getAllProductsToUser(user.getId()));
         }
-        List<Products> allProducts = (List<Products>) productRepositorie.findAll();
-        model.addAttribute("products", allProducts);
+        model.addAttribute("products", (List<Products>) productRepository.findAll());
         return "home";
     }
 
     @GetMapping("/login")
     public String showLoginPage(Principal principal) {
-
-        if (principal != null) {
+        if (isUserLogedIn(principal)) {
             return "redirect:/";
         }
         return "login";
@@ -71,94 +57,122 @@ public class MainController {
 
     @GetMapping("/signup")
     public String showSignupPage(Model model, Principal principal) {
-        if (principal != null) {
+        if (isUserLogedIn(principal)) {
             return "redirect:/";
+        } else {
+            model.addAttribute("user", new User());
+            return "signup";
         }
-        User user = new User();
-        model.addAttribute("user", user);
-        return "signup";
     }
 
     @PostMapping("/signup")
     public String createNewUser(@ModelAttribute User user, BindingResult br) {
-        UserValidator userValidator = new UserValidator();
-        if (userValidator.supports(user.getClass())) {
-            userValidator.validate(user, br);
-        }
+        validateUserClass(user, br);
         if (br.hasErrors()) {
             return "signup";
         } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepositorie.save(user);
+            saveOrUpdateUser(user);
             return "login";
         }
     }
 
     @GetMapping("/profile")
     public String showProfilePage(Principal principal, Model model) {
-        model.addAttribute("principal", principal);
-        if (principal != null) {
-            User user = userAccessService.getLogedInUser(principal);
-            model.addAttribute("user", user);
+        if (isUserLogedIn(principal)) {
+            model.addAttribute("user", getLoggedInUser(principal));
+            return "profile";
+        }else {
+            return "redirect:/";
         }
-        return "profile";
     }
 
     @GetMapping("/editprofile")
     public String showEditProfilePage(Principal principal, Model model) {
-        model.addAttribute("principal", principal);
-        if (principal != null) {
-            User user = userAccessService.getLogedInUser(principal);
-            model.addAttribute("user", user);
+        if (isUserLogedIn(principal)) {
+            model.addAttribute("user", getLoggedInUser(principal));
+            return "editprofile";
+        } else {
+            return "redirect:/";
         }
-        return "editprofile";
     }
-
 
     @PostMapping("/editprofile")
     public String editProfile(Principal principal, @ModelAttribute User user, BindingResult br, Model model) {
-        model.addAttribute("principal", principal);
-        UserValidator userValidator = new UserValidator();
-        if (userValidator.supports(user.getClass())) {
-            userValidator.validate(user, br);
+        if (isUserLogedIn(principal)){
+            model.addAttribute("user", getLoggedInUser(principal));
         }
+        validateUserClass(user, br);
         if (br.hasErrors()) {
             return "editprofile";
         } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepositorie.save(user);
+            saveOrUpdateUser(user);
             return "redirect:profile";
         }
     }
 
     @PostMapping("/addToCart/{ProductId}")
     public String addProductToCart(@ModelAttribute UserOrder userOrder, Principal principal, @PathVariable int ProductId){
-        int userId = userAccessService.getLogedInUser(principal).getId();
-        userOrderRepositorie.save(new UserOrder("In cart", userId, ProductId));
+        userOrderRepository.save(new UserOrder("In cart", getLoggedInUser(principal).getId(), ProductId));
         return "redirect:/";
     }
 
     @GetMapping("/cart")
     public String showCart(Principal principal, Model model){
-        model.addAttribute("principal", principal);
-        if (principal != null) {
-            User user = userAccessService.getLogedInUser(principal);
-            List<UserOrder> allUserOrders = userOrderRepositorie.findAllByUserId(user.getId());
-            List<DTO> dtoList = new ArrayList<>();
-            for (UserOrder uo : allUserOrders) {
-                dtoList.add(new DTO(uo, productRepositorie.findById(uo.getProduct_id())));
-            }
-            model.addAttribute("DTO", dtoList);
-            model.addAttribute("user", user);
+        if (isUserLogedIn(principal)) {
+            model.addAttribute("usersCart", getUsersCart(getLoggedInUser(principal)));
+            model.addAttribute("user", getLoggedInUser(principal));
+            return "cart";
+        } else {
+            return "redirect:/";
         }
-        return "cart";
     }
 
     @PostMapping("/removeFromCart/{userOrderId}")
     public String removeProductFromCart(@PathVariable int userOrderId, Principal principal){
-        if (principal != null){
-            userOrderRepositorie.deleteById(userOrderId);
+        if (isUserLogedIn(principal)){
+            userOrderRepository.deleteById(userOrderId);
         }
         return "redirect:/cart";
+    }
+
+    private void validateUserClass(@ModelAttribute User user, BindingResult br) {
+        UserValidator userValidator = new UserValidator();
+        if (userValidator.supports(user.getClass())) {
+            userValidator.validate(user, br);
+        }
+    }
+
+    private boolean isUserLogedIn(Principal principal){
+        return principal != null;
+    }
+
+    private User getLoggedInUser(Principal principal) {
+        return userRepository.findByMail(principal.getName());
+    }
+
+    private int getSumTotalForUsersCart(int UserId) {
+        List<Products> usersProducts = userOrderRepository.getAllProductsToUser(UserId);
+        int total = 0;
+        for (Products p : usersProducts) {
+            total += Integer.parseInt(p.getPrice());
+        }
+        return total;
+    }
+
+    private List<DTO> getUsersCart(User user) {
+        return addProductsToUsersCart(userOrderRepository.findAllByUserId(user.getId()));
+    }
+
+    private List<DTO> addProductsToUsersCart(List<UserOrder> allUserOrders) {
+        List<DTO> dtoList = new ArrayList<>();
+        for (UserOrder uo : allUserOrders) {
+            dtoList.add(new DTO(uo, productRepository.findById(uo.getProduct_id())));
+        }
+        return dtoList;
+    }
+
+    private void saveOrUpdateUser(@ModelAttribute User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

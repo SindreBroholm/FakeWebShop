@@ -8,18 +8,16 @@
     <title>header</title>
 </head>
 <body>
-
     <header>
         <nav class="navigation">
             <section class="allNavButtons">
-                <a class="navButton hoverNavButton" th:href="@{/}" >Home</a>
-                <a class="navButton hoverNavButton" >Woman</a>
-                <a class="navButton hoverNavButton" >Man</a>
-                <a class="navButton hoverNavButton" >Child</a>
-                <a class="navButton hoverNavButton" >Cart</a>
+                <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+                <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+                <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
+                <br>
             </section>
             <section class="loginButtons">
-                <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+                <form th:if="${user != null}" th:action="@{/logout}" method="post">
                     <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
                 </form>
                 <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/signup}">Sign up</a>
@@ -28,14 +26,17 @@
         </nav>
     </header>
 
+    <main>
+
+    </main>
 
     <footer>
         <div class="footerInfo">
-            <p>Dette er en falsk nettside</p>
+            <p>© 2020</p>
+            <p>sindreset@gmail.com</p>
         </div>
         <div class="kontaktinfo">
             <p>Sindre Broholm Sæther</p>
-            <p>Tlf: 93071137</p>
             <p>Junior It Konsulent</p>
         </div>
     </footer>

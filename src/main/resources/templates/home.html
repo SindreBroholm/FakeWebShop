@@ -13,12 +13,12 @@
     <nav class="navigation">
         <section class="allNavButtons">
             <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
-            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
-            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
+            <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
             <br>
         </section>
         <section class="loginButtons">
-            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+            <form th:if="${user != null}" th:action="@{/logout}" method="post">
                 <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
             </form>
             <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/signup}">Sign up</a>
@@ -32,7 +32,7 @@
         <div class="products" th:each="product : ${products}">
             <h4 class="destinationGridBoxesHeader" th:text="${product.name}"></h4>
             <div class="priceBox" th:text="'$' + ${product.price}"></div>
-            <form th:if="${principal != null}" th:action="${'/addToCart/'+product.id}" method="post">
+            <form th:if="${user != null}" th:action="${'/addToCart/'+product.id}" method="post">
                 <input class="addtocartB hoverNavButton" type="submit" value="Add to cart">
             </form>
         </div>
@@ -41,19 +41,16 @@
 <section id="cartInfo" th:if="${user != null}">
     <div class="infoAboutUserCart">
         <span th:text="'items in cart: '+${userOrders.size()}"></span>
-        <span th:text="'For a total of: '+${cartTotalSum}+'$'"></span>
-    </div>
-    <div class="productsInCart">
-
+        <span th:text="'Sum total: '+${cartTotalSum}+'$'"></span>
     </div>
 </section>
 <footer>
     <div class="footerInfo">
-        <p>Dette er en falsk nettside</p>
+        <p>© 2020</p>
+        <p>sindreset@gmail.com</p>
     </div>
     <div class="kontaktinfo">
         <p>Sindre Broholm Sæther</p>
-        <p>Tlf: 93071137</p>
         <p>Junior It Konsulent</p>
     </div>
 </footer>

@@ -9,14 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private SecurityUserDetailsService securityUserDetailsService;
+    private final SecurityUserDetailsService securityUserDetailsService;
 
     public SecurityConfig(SecurityUserDetailsService securityUserDetailsService) {
         this.securityUserDetailsService = securityUserDetailsService;
@@ -36,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/");
-
     }
 
     @Override

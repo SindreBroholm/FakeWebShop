@@ -13,11 +13,11 @@
     <nav class="navigation">
         <section class="allNavButtons">
             <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
-            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
-            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+            <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
         </section>
         <section class="loginButtons">
-            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+            <form th:if="${user != null}" th:action="@{/logout}" method="post">
                 <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
             </form>
         </section>
@@ -27,21 +27,31 @@
     <h2 class="yourProductsH2">Your products</h2>
     <div id="UsersproductsBox">
         <section id="productBoxes">
-            <div class="products" th:each="dto : ${DTO}">
-                <h4 class="destinationGridBoxesHeader" th:text="${dto.getProducts().name}"></h4>
-                <div class="priceBox" th:text="'$' + ${dto.getProducts().price}"></div>
-                <form class="removeFrom" th:action="${'/removeFromCart/'+dto.getUserOrder().id}" method="post">
+            <div class="products" th:each="cartProduct : ${usersCart}">
+                <h4 class="destinationGridBoxesHeader" th:text="${cartProduct.getProducts().name}"></h4>
+                <div class="priceBox" th:text="'$' + ${cartProduct.getProducts().price}"></div>
+                <form class="removeFrom" th:action="${'/removeFromCart/'+cartProduct.getUserOrder().id}" method="post">
                     <input class="removeFromCartB hoverNavButton" type="submit" value="Remove from cart">
                 </form>
             </div>
         </section>
     </div>
-    <div class="paybuttom">
+    <div class="paybuttom" th:if="${!usersCart.isEmpty()}">
         <a class="payB" th:href="@{/pay}">Pay</a>
+    </div>
+    <div class="paybuttom" th:if="${usersCart.isEmpty()}">
+        <a class="payB" th:href="@{/}">Home</a>
     </div>
 </main>
 <footer>
-
+    <div class="footerInfo">
+        <p>© 2020</p>
+        <p>sindreset@gmail.com</p>
+    </div>
+    <div class="kontaktinfo">
+        <p>Sindre Broholm Sæther</p>
+        <p>Junior It Konsulent</p>
+    </div>
 </footer>
 </body>
 </html>
