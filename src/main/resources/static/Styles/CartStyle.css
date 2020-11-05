@@ -1,0 +1,60 @@
+.yourProductsH2{
+    font-size: 3em;
+    color: lightsalmon;
+    text-align: center;
+    margin: 0% auto 3% auto;
+}
+
+#productBoxes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.products {
+    min-height: 15vh;
+    min-width: 15vw;
+    max-height: 15vh;
+    max-width: 15vw;
+    margin: 3% 3%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightsalmon;
+    border-radius: 3px;
+}
+
+.removeFromCartB{
+    margin: 0 auto;
+    color: lightsalmon;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+#UsersproductsBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.paybuttom {
+    grid-area: payB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payB {
+    width: 66%;
+    margin: 2.5%;
+    color: white;
+    text-decoration: none;
+    background-color: lightsalmon;
+    border: 1px solid;
+    border-radius: 30px;
+    padding: 10px 30px;
+    transition: all 1s;
+    text-align: center;
+}

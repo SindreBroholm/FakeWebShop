@@ -2,13 +2,11 @@ package sbs.academy.data;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "userorder")
 public class UserOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +21,7 @@ public class UserOrder {
     public UserOrder() {
     }
 
-    public UserOrder(LocalDateTime timestamp, String status, int user_id, int product_id) {
-        this.timestamp = timestamp;
+    public UserOrder( String status, int user_id, int product_id) {
         this.status = status;
         this.user_id = user_id;
         this.product_id = product_id;

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Sindre Broholm Sæther">
     <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/HomeStyle.css}">
     <title>Home</title>
 </head>
 <body class="grid-container">
@@ -13,7 +14,8 @@
         <section class="allNavButtons">
             <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
             <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
-            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
+            <br>
         </section>
         <section class="loginButtons">
             <form th:if="${principal != null}" th:action="@{/logout}" method="post">
@@ -25,8 +27,26 @@
     </nav>
 </header>
 <main>
-
+    <h1>All products</h1>
+    <section id="productBoxes">
+        <div class="products" th:each="product : ${products}">
+            <h4 class="destinationGridBoxesHeader" th:text="${product.name}"></h4>
+            <div class="priceBox" th:text="'$' + ${product.price}"></div>
+            <form th:if="${principal != null}" th:action="${'/addToCart/'+product.id}" method="post">
+                <input class="addtocartB hoverNavButton" type="submit" value="Add to cart">
+            </form>
+        </div>
+    </section>
 </main>
+<section id="cartInfo" th:if="${user != null}">
+    <div class="infoAboutUserCart">
+        <span th:text="'items in cart: '+${userOrders.size()}"></span>
+        <span th:text="'For a total of: '+${cartTotalSum}+'$'"></span>
+    </div>
+    <div class="productsInCart">
+
+    </div>
+</section>
 <footer>
     <div class="footerInfo">
         <p>Dette er en falsk nettside</p>

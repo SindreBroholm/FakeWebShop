@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sindre Broholm Sæther">
+    <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
+    <link rel="stylesheet" th:href="@{/Styles/CartStyle.css}">
+    <title>Cart</title>
+</head>
+<body class="grid-container">
+<header>
+    <nav class="navigation">
+        <section class="allNavButtons">
+            <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
+            <a th:if="${principal != null}" class="navButton hoverNavButton">Cart</a>
+        </section>
+        <section class="loginButtons">
+            <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+                <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
+            </form>
+        </section>
+    </nav>
+</header>
+<main>
+    <h2 class="yourProductsH2">Your products</h2>
+    <div id="UsersproductsBox">
+        <section id="productBoxes">
+            <div class="products" th:each="dto : ${DTO}">
+                <h4 class="destinationGridBoxesHeader" th:text="${dto.getProducts().name}"></h4>
+                <div class="priceBox" th:text="'$' + ${dto.getProducts().price}"></div>
+                <form class="removeFrom" th:action="${'/removeFromCart/'+dto.getUserOrder().id}" method="post">
+                    <input class="removeFromCartB hoverNavButton" type="submit" value="Remove from cart">
+                </form>
+            </div>
+        </section>
+    </div>
+    <div class="paybuttom">
+        <a class="payB" th:href="@{/pay}">Pay</a>
+    </div>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>
