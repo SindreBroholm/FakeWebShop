@@ -10,7 +10,7 @@ form {
     width: 100%;
     display: grid;
     gap: 1%;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: space-evenly;
     align-items: center;
@@ -19,6 +19,7 @@ form {
             ". email email1 ."
             ". age age1 ."
             ". password password1 ."
+            ". confrimpassword confrimpassword1 ."
             ". address address1 ."
             ". zipCode zipCode1 ."
             ". backB submit ."
@@ -48,6 +49,12 @@ form {
 }
 .password1{
     grid-area: password1;
+}
+.confrimpassword{
+    grid-area: confrimpassword;
+}
+.confrimpassword1 {
+    grid-area: confrimpassword1;
 }
 .address{
     grid-area: address;

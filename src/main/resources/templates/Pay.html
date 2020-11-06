@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Sindre Broholm Sæther">
     <link rel="stylesheet" th:href="@{/Styles/GlobalStyle.css}">
-    <link rel="stylesheet" th:href="@{/Styles/CartStyle.css}">
-    <title>Cart</title>
+    <title>Donate</title>
 </head>
 <body class="grid-container">
 <header>
@@ -15,34 +14,25 @@
             <a class="navButton hoverNavButton" th:href="@{/}">Home</a>
             <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/profile}">Profile</a>
             <a th:if="${user != null}" class="navButton hoverNavButton" th:href="@{/cart}">Cart</a>
+            <br>
         </section>
         <section class="loginButtons">
             <form th:if="${user != null}" th:action="@{/logout}" method="post">
                 <input class="navButtonRight hoverNavButton" type="submit" value="Logout">
             </form>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/signup}">Sign up</a>
+            <a th:if="${user == null}" class="navButtonRight hoverNavButton" th:href="@{/login}">Login</a>
         </section>
     </nav>
 </header>
+
 <main>
-    <h2 class="yourProductsH2">Your cart</h2>
-    <div id="UsersproductsBox">
-        <section id="productBoxes">
-            <div class="products" th:each="cartProduct : ${usersCart}">
-                <h4 class="destinationGridBoxesHeader" th:text="${cartProduct.getProducts().name}"></h4>
-                <div class="priceBox" th:text="'$' + ${cartProduct.getProducts().price}"></div>
-                <form class="removeFrom" th:action="${'/removeFromCart/'+cartProduct.getUserOrder().id}" method="post">
-                    <input class="removeFromCartB hoverNavButton" type="submit" value="Remove from cart">
-                </form>
-            </div>
-        </section>
-    </div>
-    <div class="paybuttom" th:if="${!usersCart.isEmpty()}">
-        <a class="payB" th:href="@{/pay}">Pay</a>
-    </div>
-    <div class="paybuttom" th:if="${usersCart.isEmpty()}">
-        <a class="payB" th:href="@{/}">Home</a>
+    <h1 style="text-align: center; color: lightsalmon; font-size: 3em; margin: 7% 0 3% 0;" th:text="${cartTotalSum + '$'}"></h1>
+    <div style="display:flex; justify-content: center; align-items: center">
+        <img th:src="@{/Assets/vipsQPR.png}" alt="Donate" width="307" height="400">
     </div>
 </main>
+
 <footer>
     <div class="footerInfo">
         <p>© 2020</p>
@@ -53,5 +43,6 @@
         <p>Junior It Konsulent</p>
     </div>
 </footer>
+
 </body>
 </html>

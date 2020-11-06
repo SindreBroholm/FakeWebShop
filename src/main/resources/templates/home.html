@@ -40,10 +40,11 @@
 </main>
 <section id="cartInfo" th:if="${user != null}">
     <div class="infoAboutUserCart">
-        <span th:text="'items in cart: '+${userOrders.size()}"></span>
+        <span th:text="'Items in cart: '+${userOrders.size()}"></span>
         <span th:text="'Sum total: '+${cartTotalSum}+'$'"></span>
     </div>
 </section>
+
 <footer>
     <div class="footerInfo">
         <p>© 2020</p>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/Styles/EditProfileStyle.css}">
     <title>Edit Profile</title>
 </head>
-<body>
+<body class="grid-container">
 <header>
     <nav class="navigation">
         <section class="allNavButtons">
@@ -39,8 +39,11 @@
         <p class="mail">E-mail*</p>
         <input class="mail1" th:errorclass="filderror" th:field="*{mail}">
 
-        <p class="password" >Password* </p>
+        <p class="password">Password* </p>
         <input class="password1" th:errorclass="filderror" type="password" th:field="*{password}">
+
+        <p class="confrimpassword">Confrim password* </p>
+        <input class="confrimpassword1" th:errorclass="filderror" type="password" th:field="*{confrimpassword}">
 
         <p class="address">Address</p>
         <input class="address1" th:field="*{address}">
@@ -58,6 +61,7 @@
         </div>
     </form>
 </main>
+
 <footer>
     <div class="footerInfo">
         <p>© 2020</p>
@@ -68,6 +72,5 @@
         <p>Junior It Konsulent</p>
     </div>
 </footer>
-
 </body>
 </html>

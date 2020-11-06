@@ -1,10 +1,9 @@
 package sbs.academy.data;
 
+import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Entity
@@ -19,22 +18,30 @@ public class User {
     @NotEmpty
     private String age;
     @Email
+    @Column(unique = true)
     private String mail;
+
     @Size(min = 6, max = 300)
     private String password;
 
+    @Size(min = 6, max = 300)
+    @Column(name = "confirmpassword")
+    private String confrimpassword;
+
     private String address;
+
     private String zipCode;
 
     public User() {
     }
 
-    public User(int id, String name, String age, String mail, String password, String address, String zipCode) {
+    public User(int id, String name, String age, String mail, String password,String confrimpassword, String address, String zipCode) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.mail = mail;
         this.password = password;
+        this.confrimpassword = confrimpassword;
         this.address = address;
         this.zipCode = zipCode;
     }
@@ -79,6 +86,14 @@ public class User {
         this.password = password;
     }
 
+    public String getConfrimpassword() {
+        return confrimpassword;
+    }
+
+    public void setConfrimpassword(String confrimpassword) {
+        this.confrimpassword = confrimpassword;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -94,4 +109,5 @@ public class User {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
 }

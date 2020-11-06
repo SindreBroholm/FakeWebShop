@@ -4,19 +4,20 @@
     text-align: center;
     margin: 0% auto 3% auto;
 }
-p{
+.userDetails > p{
     color: black;
     font-size: 2em;
 }
 .userDetails {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
             ". name name1 ."
             ". age age1 ."
             ". mail mail1 ."
             ". password password1 ."
+            ". confrimpassword confrimpassword1 ."
             ". address address1 ."
             ". zipCode zipCode1 ."
             ". backB submitB .";
@@ -48,6 +49,12 @@ p{
 }
 .password1 {
     grid-area: password1;
+}
+.confrimpassword{
+    grid-area: confrimpassword;
+}
+.confrimpassword1 {
+    grid-area: confrimpassword1;
 }
 .address{
     grid-area: address;

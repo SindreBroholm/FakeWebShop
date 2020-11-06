@@ -4,7 +4,7 @@
     text-align: center;
     margin: 0% auto 3% auto;
 }
-p{
+.userDetails > p{
     color: black;
     font-size: 2em;
 }

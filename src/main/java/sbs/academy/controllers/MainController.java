@@ -14,6 +14,7 @@ import sbs.academy.repositories.UserOrderRepository;
 import sbs.academy.repositories.UserRepository;
 import sbs.academy.validators.UserValidator;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class MainController {
     }
 
     @PostMapping("/signup")
-    public String createNewUser(@ModelAttribute User user, BindingResult br) {
+    public String createNewUser(@Valid User user, BindingResult br) {
         validateUserClass(user, br);
         if (br.hasErrors()) {
             return "signup";
@@ -97,7 +98,7 @@ public class MainController {
     }
 
     @PostMapping("/editprofile")
-    public String editProfile(Principal principal, @ModelAttribute User user, BindingResult br, Model model) {
+    public String editProfile(Principal principal, @Valid User user, BindingResult br, Model model) {
         if (isUserLogedIn(principal)){
             model.addAttribute("user", getLoggedInUser(principal));
         }
@@ -135,8 +136,17 @@ public class MainController {
         return "redirect:/cart";
     }
 
-    private void validateUserClass(@ModelAttribute User user, BindingResult br) {
-        UserValidator userValidator = new UserValidator();
+    @GetMapping("/pay")
+    public String showDonatePage(Principal principal, Model model){
+        if (isUserLogedIn(principal)){
+            model.addAttribute("user", getLoggedInUser(principal));
+            model.addAttribute("cartTotalSum", getSumTotalForUsersCart(getLoggedInUser(principal).getId()));
+        }
+        return "Pay";
+    }
+
+    private void validateUserClass(@Valid User user, BindingResult br) {
+        UserValidator userValidator = new UserValidator(userRepository);
         if (userValidator.supports(user.getClass())) {
             userValidator.validate(user, br);
         }
@@ -171,8 +181,9 @@ public class MainController {
         return dtoList;
     }
 
-    private void saveOrUpdateUser(@ModelAttribute User user) {
+    private void saveOrUpdateUser(@Valid User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setConfrimpassword(passwordEncoder.encode(user.getConfrimpassword()));
         userRepository.save(user);
     }
 }
