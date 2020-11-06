@@ -1,6 +1,6 @@
 package sbs.academy.validators;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -45,10 +45,12 @@ public class UserValidator implements Validator {
             }
         }
 
-        List<String> usersMail = userRepository.findAllByMail();
-        for (String s : usersMail) {
-            if (s.equals(user.getMail())) {
-                errors.rejectValue("mail", "E-mail already taken");
+        List<User> usersMail = (List<User>)userRepository.findAll();
+        for (User u : usersMail) {
+            if (u.getMail().equals(user.getMail())) {
+                if (u.getId() != user.getId()){
+                    errors.rejectValue("mail", "E-mail already taken");
+                }
             }
         }
 

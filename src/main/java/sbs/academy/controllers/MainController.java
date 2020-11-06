@@ -44,7 +44,7 @@ public class MainController {
             model.addAttribute("cartTotalSum", getSumTotalForUsersCart(user.getId()));
             model.addAttribute("allUserProducts", userOrderRepository.getAllProductsToUser(user.getId()));
         }
-        model.addAttribute("products", (List<Products>) productRepository.findAll());
+        model.addAttribute("products", (List<Products>)productRepository.findAll());
         return "home";
     }
 
@@ -67,7 +67,7 @@ public class MainController {
     }
 
     @PostMapping("/signup")
-    public String createNewUser(@Valid User user, BindingResult br) {
+    public String createNewUser(@ModelAttribute User user, BindingResult br) {
         validateUserClass(user, br);
         if (br.hasErrors()) {
             return "signup";
@@ -98,17 +98,18 @@ public class MainController {
     }
 
     @PostMapping("/editprofile")
-    public String editProfile(Principal principal, @Valid User user, BindingResult br, Model model) {
+    public String editProfile(Principal principal, @ModelAttribute User user, BindingResult br,  Model model) {
         if (isUserLogedIn(principal)){
-            model.addAttribute("user", getLoggedInUser(principal));
+            model.addAttribute("user", user);
+            validateUserClass(user, br);
+            if (br.hasErrors()) {
+                return "editprofile";
+            } else {
+                saveOrUpdateUser(user);
+                return "redirect:profile";
+            }
         }
-        validateUserClass(user, br);
-        if (br.hasErrors()) {
-            return "editprofile";
-        } else {
-            saveOrUpdateUser(user);
-            return "redirect:profile";
-        }
+        return "redirect:/";
     }
 
     @PostMapping("/addToCart/{ProductId}")
