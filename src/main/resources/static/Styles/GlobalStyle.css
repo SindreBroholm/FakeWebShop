@@ -9,7 +9,6 @@ body {
     width: 100vw;
     height: fit-content;
 }
-
 .grid-container {
     display: grid;
     width: 100%;
@@ -18,15 +17,17 @@ body {
     gap: 0px 0px;
     grid-template-areas:
     "Header Header Header Header Header"
-    ". Main Main Main cart"
-    ". Main Main Main cart"
-    ". Main Main Main cart"
+    "admin Main Main Main cart"
+    "admin Main Main Main cart"
+    "admin Main Main Main cart"
     "Footer Footer Footer Footer Footer";
 }
 #cartInfo{
     grid-area: cart;
 }
-
+.admin{
+    grid-area: admin;
+}
 header {
     background-image: url("../Assets/cover.jpg");
     background-repeat: no-repeat;
@@ -47,14 +48,12 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-
 .allNavButtons {
     margin: 0 0 0 25px;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-
 .navButton {
     margin: 0 20px;
     font-size: 2em;
@@ -73,8 +72,6 @@ header {
     transform: scale(1.2, 1.2);
     color: lightsalmon;
 }
-
-
 input[type="submit" i] {
     user-select: none;
     white-space: pre;
@@ -95,12 +92,10 @@ input[type="submit" i] {
     align-items: center;
     transition: all 1s;
 }
-
 main {
     grid-area: Main;
     min-height: 100vh;
 }
-
 footer {
     color: white;
     grid-area: Footer;

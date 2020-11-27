@@ -27,7 +27,7 @@
     <h2 class="yourProductsH2">Your cart</h2>
     <div id="UsersproductsBox">
         <section id="productBoxes">
-            <div class="products" th:each="cartProduct : ${usersCart}">
+            <div class="product" th:each="cartProduct : ${usersCart}">
                 <h4 class="destinationGridBoxesHeader" th:text="${cartProduct.getProducts().name}"></h4>
                 <div class="priceBox" th:text="'$' + ${cartProduct.getProducts().price}"></div>
                 <form class="removeFrom" th:action="${'/removeFromCart/'+cartProduct.getUserOrder().id}" method="post">

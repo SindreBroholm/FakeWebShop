@@ -27,12 +27,12 @@
     </nav>
 </header>
 <main>
-    <h1>All products</h1>
+    <h1>All product</h1>
     <section id="productBoxes">
-        <div class="products" th:each="product : ${products}">
-            <h4 class="destinationGridBoxesHeader" th:text="${product.name}"></h4>
-            <div class="priceBox" th:text="'$' + ${product.price}"></div>
-            <form th:if="${user != null}" th:action="${'/addToCart/'+product.id}" method="post">
+        <div class="product" th:each="productInList : ${productList}">
+            <h4 class="destinationGridBoxesHeader" th:text="${productInList.name}"></h4>
+            <div class="priceBox" th:text="'$' + ${productInList.price}"></div>
+            <form th:if="${user != null}" th:action="${'/addToCart/'+productInList.id}" method="post">
                 <input class="addtocartB hoverNavButton" type="submit" value="Add to cart">
             </form>
         </div>
@@ -44,7 +44,28 @@
         <span th:text="'Sum total: '+${cartTotalSum}+'$'"></span>
     </div>
 </section>
-
+<div th:if="${user != null}">
+    <section class="admin" th:if="${user.role.equals('ADMIN')}">
+        <form id="addProduct" th:action="'/'" th:method="post" th:object="${product}">
+            <h3>Add new product</h3>
+            <label>
+                <p>Name</p>
+                <input type="text" th:field="*{name}" th:errorclass="filderror">
+            </label>
+            <label>
+                <p>Category</p>
+                <input type="text" th:field="*{category}" th:errorclass="filderror">
+            </label>
+            <label>
+                <p>Price</p>
+                <input type="text" th:field="*{price}" th:errorclass="filderror">
+            </label>
+            <label>
+                <button class="addtocartB hoverNavButton" type="submit">Add product</button>
+            </label>
+        </form>
+    </section>
+</div>
 <footer>
     <div class="footerInfo">
         <p>© 2020</p>

@@ -27,5 +27,5 @@ create table UserOrder(
     product_id int not null,
     primary key (id),
     foreign key (user_id) REFERENCES User(id),
-    foreign key (product_id) REFERENCES Products(id)
+    foreign key (product_id) REFERENCES product(id)
 );

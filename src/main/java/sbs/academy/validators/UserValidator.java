@@ -1,18 +1,15 @@
 package sbs.academy.validators;
 
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import sbs.academy.data.User;
 import sbs.academy.repositories.UserRepository;
 
-import java.util.List;
 
 public class UserValidator implements Validator {
 
-    private UserRepository userRepository;
-
+    private final UserRepository userRepository;
     public UserValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -44,11 +41,18 @@ public class UserValidator implements Validator {
                 errors.rejectValue("confrimpassword", "Password didn't match", "please match passwords");
             }
         }
+        if (user.getPassword() != null) {
+            if (user.getPassword().length() < 6) {
+                errors.rejectValue("password", "Password was to short");
+            }
+        } else {
+            errors.rejectValue("password", "You must enter a password");
+        }
 
-        List<User> usersMail = (List<User>)userRepository.findAll();
-        for (User u : usersMail) {
-            if (u.getMail().equals(user.getMail())) {
-                if (u.getId() != user.getId()){
+        User foundByMail = userRepository.findByMail(user.getMail());
+        if (foundByMail != null) {
+            if (foundByMail.getMail().equals(user.getMail())) {
+                if (foundByMail.getId() != user.getId()) {
                     errors.rejectValue("mail", "E-mail already taken");
                 }
             }
@@ -58,7 +62,4 @@ public class UserValidator implements Validator {
             errors.rejectValue("name", "name is to short");
         }
     }
-
-
 }
-

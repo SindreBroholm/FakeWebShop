@@ -6,12 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sbs.academy.data.DTO;
-import sbs.academy.data.Products;
+import sbs.academy.data.Product;
 import sbs.academy.data.User;
 import sbs.academy.data.UserOrder;
 import sbs.academy.repositories.ProductRepository;
 import sbs.academy.repositories.UserOrderRepository;
 import sbs.academy.repositories.UserRepository;
+import sbs.academy.security.authority.UserRole;
+import sbs.academy.validators.ProductValidator;
 import sbs.academy.validators.UserValidator;
 
 import javax.validation.Valid;
@@ -37,20 +39,23 @@ public class MainController {
 
     @GetMapping("/")
     public String showHomePage(Principal principal, Model model) {
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             User user = getLoggedInUser(principal);
             model.addAttribute("user", user);
             model.addAttribute("userOrders", userOrderRepository.findAllByUserId(user.getId()));
             model.addAttribute("cartTotalSum", getSumTotalForUsersCart(user.getId()));
             model.addAttribute("allUserProducts", userOrderRepository.getAllProductsToUser(user.getId()));
+            if (user.getRole().equals(UserRole.ADMIN.name())){
+                model.addAttribute("product", new Product());
+            }
         }
-        model.addAttribute("products", (List<Products>)productRepository.findAll());
+        model.addAttribute("productList", (List<Product>)productRepository.findAll());
         return "home";
     }
 
     @GetMapping("/login")
     public String showLoginPage(Principal principal) {
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             return "redirect:/";
         }
         return "login";
@@ -58,7 +63,7 @@ public class MainController {
 
     @GetMapping("/signup")
     public String showSignupPage(Model model, Principal principal) {
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             return "redirect:/";
         } else {
             model.addAttribute("user", new User());
@@ -79,7 +84,7 @@ public class MainController {
 
     @GetMapping("/profile")
     public String showProfilePage(Principal principal, Model model) {
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             model.addAttribute("user", getLoggedInUser(principal));
             return "profile";
         }else {
@@ -89,7 +94,7 @@ public class MainController {
 
     @GetMapping("/editprofile")
     public String showEditProfilePage(Principal principal, Model model) {
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             model.addAttribute("user", getLoggedInUser(principal));
             return "editprofile";
         } else {
@@ -99,7 +104,7 @@ public class MainController {
 
     @PostMapping("/editprofile")
     public String editProfile(Principal principal, @ModelAttribute User user, BindingResult br,  Model model) {
-        if (isUserLogedIn(principal)){
+        if (isUserLoggedIn(principal)){
             model.addAttribute("user", user);
             validateUserClass(user, br);
             if (br.hasErrors()) {
@@ -120,7 +125,7 @@ public class MainController {
 
     @GetMapping("/cart")
     public String showCart(Principal principal, Model model){
-        if (isUserLogedIn(principal)) {
+        if (isUserLoggedIn(principal)) {
             model.addAttribute("usersCart", getUsersCart(getLoggedInUser(principal)));
             model.addAttribute("user", getLoggedInUser(principal));
             return "cart";
@@ -131,7 +136,7 @@ public class MainController {
 
     @PostMapping("/removeFromCart/{userOrderId}")
     public String removeProductFromCart(@PathVariable int userOrderId, Principal principal){
-        if (isUserLogedIn(principal)){
+        if (isUserLoggedIn(principal)){
             userOrderRepository.deleteById(userOrderId);
         }
         return "redirect:/cart";
@@ -139,11 +144,23 @@ public class MainController {
 
     @GetMapping("/pay")
     public String showDonatePage(Principal principal, Model model){
-        if (isUserLogedIn(principal)){
+        if (isUserLoggedIn(principal)){
             model.addAttribute("user", getLoggedInUser(principal));
             model.addAttribute("cartTotalSum", getSumTotalForUsersCart(getLoggedInUser(principal).getId()));
         }
         return "Pay";
+    }
+
+    @PostMapping("/")
+    public String addNewProduct(Principal principal, @ModelAttribute Product product, BindingResult br){
+        if (isUserLoggedIn(principal)){
+            User user = getLoggedInUser(principal);
+            if (user.getRole().equals(UserRole.ADMIN.name())){
+                validateProductClass(product, br);
+                productRepository.save(new Product(product.getCategory(), product.getName(), product.getPrice()));
+            }
+        }
+        return "redirect:/";
     }
 
     private void validateUserClass(@Valid User user, BindingResult br) {
@@ -152,28 +169,29 @@ public class MainController {
             userValidator.validate(user, br);
         }
     }
-
-    private boolean isUserLogedIn(Principal principal){
+    private void validateProductClass(@Valid Product product, BindingResult br) {
+        ProductValidator productValidator = new ProductValidator(productRepository);
+        if (productValidator.supports(product.getClass())) {
+            productValidator.validate(product, br);
+        }
+    }
+    private boolean isUserLoggedIn(Principal principal){
         return principal != null;
     }
-
     private User getLoggedInUser(Principal principal) {
         return userRepository.findByMail(principal.getName());
     }
-
     private int getSumTotalForUsersCart(int UserId) {
-        List<Products> usersProducts = userOrderRepository.getAllProductsToUser(UserId);
+        List<Product> usersProducts = userOrderRepository.getAllProductsToUser(UserId);
         int total = 0;
-        for (Products p : usersProducts) {
+        for (Product p : usersProducts) {
             total += Integer.parseInt(p.getPrice());
         }
         return total;
     }
-
     private List<DTO> getUsersCart(User user) {
         return addProductsToUsersCart(userOrderRepository.findAllByUserId(user.getId()));
     }
-
     private List<DTO> addProductsToUsersCart(List<UserOrder> allUserOrders) {
         List<DTO> dtoList = new ArrayList<>();
         for (UserOrder uo : allUserOrders) {
@@ -181,7 +199,6 @@ public class MainController {
         }
         return dtoList;
     }
-
     private void saveOrUpdateUser(@Valid User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfrimpassword(passwordEncoder.encode(user.getConfrimpassword()));

@@ -1,9 +1,8 @@
 package sbs.academy.data;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import sbs.academy.security.authority.UserRole;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Entity
@@ -28,6 +27,9 @@ public class User {
     @Column(name = "confirmpassword")
     private String confrimpassword;
 
+    @NotNull
+    private String role = UserRole.SHOPPER.name();
+
     private String address;
 
     private String zipCode;
@@ -35,7 +37,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String age, String mail, String password,String confrimpassword, String address, String zipCode) {
+    public User(int id, String name, String age, String mail, String password, String confrimpassword, String address, String zipCode) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -44,6 +46,14 @@ public class User {
         this.confrimpassword = confrimpassword;
         this.address = address;
         this.zipCode = zipCode;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public int getId() {

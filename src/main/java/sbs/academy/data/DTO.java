@@ -3,14 +3,14 @@ package sbs.academy.data;
 public class DTO {
 
     private UserOrder userOrder;
-    private Products products;
+    private Product product;
 
     public DTO() {
     }
 
-    public DTO(UserOrder userOrder, Products products) {
+    public DTO(UserOrder userOrder, Product product) {
         this.userOrder = userOrder;
-        this.products = products;
+        this.product = product;
     }
 
     public UserOrder getUserOrder() {
@@ -21,11 +21,11 @@ public class DTO {
         this.userOrder = userOrder;
     }
 
-    public Products getProducts() {
-        return products;
+    public Product getProducts() {
+        return product;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProducts(Product product) {
+        this.product = product;
     }
 }
